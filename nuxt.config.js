@@ -49,7 +49,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
-
+    
     ['@nuxtjs/moment', ['ja']],
   ],
 
@@ -83,5 +83,28 @@ export default {
       
     },
   },
+  mauth:{
+    redirect: {
+      login: '/Signin',
+      logout: '/',
+      callback: '/login',
+      home: '/TopAfterLogin'
+    },
+    localStorage: false,
+    //strategiesの中身に認証ロジックを書いていく
+    strategies:{
+      //localという認証方法を使う場合
+      local:{
+        tokenType:'bearer',
+	//axiosでアクセスする際の設定
+        endpoints: {
+          login: { url: '/api/auth/m_login', method: 'post', propertyName: 'token' },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/muser', method: 'get', propertyName: 'user' }
+        }
+      },
+    },
+  },
+
   
 }

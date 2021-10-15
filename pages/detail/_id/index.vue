@@ -23,10 +23,12 @@
             <h2>予約</h2>
           </li>
           <li class="reserve-date">
-            <input type="date" name="date" v-model="date" required>
-            <datepicker class="datepicker" :format="DatePickerFormat" :language="ja" v-model="date"/>
+            <label for="date">Date</label>
+            <datepicker id="date" class="datepicker" :format="DatePickerFormat" :language="ja" v-model="date" @closed='pickerClosedChange'
+            :disabled-dates="disabledDates"/>
           </li>
           <li class="reserve-time select">
+            <label for="">Time</label>
             <select name="time" v-model="time" required>
               <option disabled selected >時間を選んでください</option>
               <option value="12:00">12:00</option>
@@ -53,6 +55,7 @@
             </select>
           </li>
           <li class="reserve-number select">
+            <label for="">Number</label>
             <select name="number" v-model="number">
               <option v-for="(n, nIndex) in 10" v-bind:key="nIndex" v-bind:value="n">{{ n }}人</option>
             </select>
@@ -78,7 +81,6 @@
             </tr>
           </table>
         </div>
-        
         </div>
         <div class="reserve-btn">
           <button @click="reserve">予約する</button>
@@ -89,8 +91,11 @@
 </template>
 <script>
 import Datepicker from "vuejs-datepicker";
-import {ja} from 'vuejs-datepicker/dist/locale'
+import {ja} from 'vuejs-datepicker/dist/locale';
+import moment from 'moment';
+
 export default {
+  
   components: {
     Datepicker
   },
@@ -104,10 +109,18 @@ export default {
       user_id: this.$auth.user.id,
       DatePickerFormat: 'yyyy/MM/dd',
       ja:ja,
+      disabledDates: {
+      to: new Date(),
+    },
     }
   },
   methods:{
-    
+    pickerClosedChange() {
+    　if (this.date) {
+      　 this.date = moment(this.date).format('YYYY-MM-DD')
+  　}
+  },
+
     async reserve() {
       try{
         const sendData = {
@@ -145,9 +158,15 @@ export default {
 }
 </script>
 <style scoped>
-.datepicker{
+.datepicker {
   color: black;
   outline: none;
+  margin-bottom: 10px;
+
+}
+.reserve-date input{
+  width: 100%;
+  
 }
 .detail{
   background-color: rgb(238, 237, 237);
@@ -253,6 +272,7 @@ td{
   }
   .reserve-contents{
     margin-left: 0;
+    padding: 20px 55px;
   }
   .reserve-btn button{
     margin-left: 0;

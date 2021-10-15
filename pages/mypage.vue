@@ -89,7 +89,6 @@ export default {
       contents: [],
       status: false,
       likeStatus: [],
-
     }
   },
   methods:{
@@ -282,7 +281,7 @@ table{
 
   .contents{
     display: block;
-    padding-left: 30px;
+    
   }
   .reserve-info{
     margin-top: 30px;
@@ -307,6 +306,10 @@ table{
   }
   .shop-btn img{
     margin: auto;
+  }
+  .card{
+    width: 100%;
+    margin: 0;
   }
 }
 </style>

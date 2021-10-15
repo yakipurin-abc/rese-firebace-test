@@ -297,6 +297,16 @@ export default {
   .unlike-img{
     margin-top: auto;
   }
+  .comment p{
+    font-size: 20px;
+    text-align: center;
+  }
+  .comment ul{
+    padding: 0;
+  }
+  .login{
+    width: 20px;
+  }
 }
 </style>
 
