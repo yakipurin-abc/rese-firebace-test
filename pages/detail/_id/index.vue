@@ -130,7 +130,6 @@ export default {
           this.email = user.email
           this.user = user.displayName
 					this.user_id = user.uid
-          this.like_check();
         }
       });
 		},
