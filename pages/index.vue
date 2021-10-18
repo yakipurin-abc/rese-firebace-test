@@ -2,6 +2,7 @@
   <div class="home">
     <div class="header">
       <Header></Header>
+
       <div class="search">
         <select name="area" id="area" v-model="searchArea" >
           <option value="">All area</option>
@@ -43,18 +44,7 @@
         <img src="~/assets/search.png" alt="">
         <input type="text" v-model="keyword" name="keyword" placeholder="search..." >
       </div>
-    <div v-if="$auth.loggedIn"></div>
-    <div v-else class="comment">
-      <ul>
-        <li>
-          <p>ログインして下さい</p>
-        </li>
-        <li>
-          <NuxtLink to="/login" class="login">Login</NuxtLink>
-          <NuxtLink to="/register" class="login">Registration</NuxtLink>
-        </li>
-      </ul>
-    </div>
+
     <div class="card">
       <div class="shop" v-for="(shop,index) in filterdShops" :key="index" >
           <div class="shop-img">
@@ -77,30 +67,45 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import firebase from "~/plugins/firebase";
 export default {
   data(){
     return{
       keyword: '',
-      user_id: '',
       likeStatus: [],
+      likeShops: [],
       shops: [],
       searchArea: '',
       searchGenre: '',
+      user: '',
+			email: '',
+      user_id: '',
     }
   },
   methods:{
+    certification(){
+			firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.email = user.email
+          this.user = user.displayName
+					this.user_id = user.uid
+          this.like_check();
+        }
+      });
+		},
     async detail(shop){
         this.$router.push({path: '/detail/'+ shop.id});
       },
     async like_check(){
-      const resLikeInfo = await this.$axios.request({
-        method: 'get',
-        url: 'http://127.0.0.1:8000/api/v1/like/' + this.$auth.user.id,
-        params: {user_id: this.$auth.user.id},
-			});
+      console.log(this.user_id);
+      const resLikeInfo = await axios.get(
+        `http://127.0.0.1:8000/api/v1/like?user_id=${this.user_id}`
+        );
 			console.log(resLikeInfo);
 			console.log('ライクインフォ');
 			this.likeStatus = resLikeInfo.data.data
+      this.likeShops = resLikeInfo.data.shop
 			console.log(this.likeStatus);
 			console.log("ライクステータス");
 			console.log(this.like)
@@ -108,7 +113,7 @@ export default {
 		},
     async like(id) {
       const addLike = {
-        user_id: this.$auth.user.id,
+        user_id: this.user_id,
 				shop_id: id,
       };
       await this.$axios.post("http://127.0.0.1:8000/api/v1/like", addLike);
@@ -118,13 +123,14 @@ export default {
 				await this.$axios.request({
   				method: 'delete',
   				url: 'http://127.0.0.1:8000/api/v1/like/{like}',
-  				data: {user_id: this.$auth.user.id,  shop_id: id},
+  				data: {user_id: this.user_id,  shop_id: id},
 				});
 				this.like_check();
     	},
   },
   created() {
-    this.like_check();
+    this.certification();
+
   },
   computed: {
     filterdShops: function(){

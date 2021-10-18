@@ -12,29 +12,16 @@
             <li>
               <NuxtLink  to="/" class="btn menu-list"  >Home</NuxtLink>
             </li>
-            <li v-if="$auth.loggedIn">
-              <p @click="logout" class="menu-list">Logout</p>
-            </li>
-            <li v-else>
-              <NuxtLink  to="/register" class="btn menu-list"  >Registration</NuxtLink>
-            </li>
-            <li v-if="$auth.loggedIn && $auth.user.name != 'admin'">
-              <NuxtLink to="/mypage" class="btn menu-list">Mypage</NuxtLink>
-            </li>
-            <li v-if="$auth.loggedIn"></li>
-            <li v-else>
+            <li>
               <NuxtLink to="/login" class="btn menu-list">Login</NuxtLink>
             </li>
-            <li v-if="$auth.loggedIn">
-              <div v-if="$auth.user.name == 'admin'">
-                <NuxtLink to="/management_user" class="btn menu-list">UserManagement</NuxtLink>
-              </div>
+            <li >
+              <p @click="logout" class="menu-list">Logout</p>
             </li>
-            <li v-if="$auth.loggedIn">
-              <div v-if="$auth.user.name == 'admin' || $auth.user.name == 'owner'">
-                <NuxtLink to="/management_shop" class="btn menu-list">ShopManagement</NuxtLink>
-              </div>
+            <li>
+              <NuxtLink to="/mypage" class="btn menu-list">Mypage</NuxtLink>
             </li>
+            <li ></li>
           </ul>
         </div>
       </div>
@@ -42,11 +29,15 @@
   </div>
 </template>
 <script>
+import firebase from "~/plugins/firebase";
 export default {
   name: "App",
   data() {
     return {
-      drawerFlg: false
+      drawerFlg: false,
+      user: '',
+			email: '',
+      user_id: '',
     };
   },
   methods: {
@@ -56,14 +47,15 @@ export default {
     closeDrawerMenu() {
       this.drawerFlg = false;
     },
-    async logout() {
-      try {
-        await this.$auth.logout();
-        this.$router.push("/login");
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    logout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        alert('ログアウトが完了しました')
+        this.$router.push('/login')
+      })
+    },
   }
 };
 </script>

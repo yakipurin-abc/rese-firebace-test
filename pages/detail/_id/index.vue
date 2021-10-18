@@ -94,6 +94,8 @@ import Datepicker from "vuejs-datepicker";
 import {ja} from 'vuejs-datepicker/dist/locale';
 import moment from 'moment';
 
+import firebase from "~/plugins/firebase";
+
 export default {
   
   components: {
@@ -106,7 +108,9 @@ export default {
       date: '',
       time: '',
       number: '',
-      user_id: this.$auth.user.id,
+      user: '',
+			email: '',
+      user_id: '',
       DatePickerFormat: 'yyyy/MM/dd',
       ja:ja,
       disabledDates: {
@@ -120,7 +124,16 @@ export default {
       　 this.date = moment(this.date).format('YYYY-MM-DD')
   　}
   },
-
+  certification(){
+			firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.email = user.email
+          this.user = user.displayName
+					this.user_id = user.uid
+          this.like_check();
+        }
+      });
+		},
     async reserve() {
       try{
         const sendData = {
@@ -154,6 +167,7 @@ export default {
   },
   created() {
     this.getContent();
+    this.certification();
   },
 }
 </script>

@@ -1,15 +1,15 @@
 <template>
   <div class="mypage" >
     <Header></Header>
-    <div class="contents" v-if="$auth.user">
+    <div class="contents">
       <div class="reserve-info">
-        <h2>{{$auth.user.name}}さん</h2>
+        <h2>{{user}}さん</h2>
         <h3>予約状況</h3>
-        <div v-if="this.status == true">
+        <div>
           <div class="reserve-detail" v-for="(item, index) in contents" :key='index'>
             <div class="reserve-ttl">
               <img src="~/assets/clock.png">
-              <p>予約{{index - 1}}</p>
+              <p>予約{{index + 1}}</p>
               <img src="~/assets/cross_white.png" class="test"  @click="deleteReserve(item.id)">
             </div>
             <div class="reserve-table">
@@ -35,13 +35,11 @@
             </div>
           </div>
         </div>
-        <div v-else>
-          <p class="no-reserve">予約なし</p>
-        </div>
       </div>
       <div class="like-info">
         <div class="like-user">
-          <h2>{{$auth.user.name}}さん</h2>
+          <h2>{{user}}さん</h2>
+          <p>{{user_id}}</p>
         </div>
         <div class="like-contents">
           <h3>お気に入り店舗</h3>
@@ -68,46 +66,46 @@
         </div>
       </div>
     </div>
-    <div v-else class="comment">
-      <ul>
-        <li>
-          <p>ログインして下さい</p>
-        </li>
-        <li>
-          <NuxtLink to="/login" class="login">Login</NuxtLink>
-          <NuxtLink to="/register" class="login">Registration</NuxtLink>
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 <script>
+import axios from "axios";
+import firebase from "~/plugins/firebase";
 export default {
   data(){
     return{
-      user_id: this.$auth.user.id,
       contents: [],
       status: false,
       likeStatus: [],
+      user: '',
+			email: '',
+      user_id: '',
     }
   },
   methods:{
+    certification(){
+			firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.email = user.email
+          this.user = user.displayName
+					this.user_id = user.uid
+          this.like_check();
+          this.getContent();
+        }
+      });
+		},
     async getContent() {
-      const resData = await this.$axios.request({
-  			method: 'get',
-  			url: 'http://127.0.0.1:8000/api/v1/reserve/' + this.user_id,
-  			params: {id: this.user_id},
-			});
-      if(resData.data.data.length !== 0){
-        this.status = true
-      }
-      this.contents = resData.data.data;
-      this.time = resData.data.data.time
+      console.log(this.user_id);
+      console.log('this.user_id');
+      const resData = await axios.get(
+        `http://127.0.0.1:8000/api/v1/reserve?user_id=${this.user_id}`
+        );
+      this.contents = resData.data.items;
+
       console.log(resData);
       console.log("レスデータ");
       console.log(this.contents);
       console.log('コンテンツ');
-      console.log(this.time)
     },
     async deleteReserve(id) {
       await this.$axios.delete("http://127.0.0.1:8000/api/v1/reserve/" + id);
@@ -115,11 +113,11 @@ export default {
       this.$router.push('/mypage');
     },
     async like_check(){
-      const resLikeInfo = await this.$axios.request({
-        method: 'get',
-        url: 'http://127.0.0.1:8000/api/v1/like/' + this.$auth.user.id,
-        params: {user_id: this.$auth.user.id},
-			});
+      console.log(this.user_id);
+      console.log('ユーザーID');
+      const resLikeInfo = await axios.get(
+        `http://127.0.0.1:8000/api/v1/like?user_id=${this.user_id}`
+        );
 			console.log(resLikeInfo);
 			console.log('ライクインフォ');
 			this.likeStatus = resLikeInfo.data.items
@@ -132,7 +130,7 @@ export default {
 				await this.$axios.request({
   				method: 'delete',
   				url: 'http://127.0.0.1:8000/api/v1/like/{like}',
-  				data: {user_id: this.$auth.user.id,  shop_id: id},
+  				data: {user_id: this.user_id,  shop_id: id},
 				});
 				this.like_check();
     	},
@@ -144,9 +142,8 @@ export default {
     },
   },
   created() {
-    this.getContent();
-    this.like_check();
 
+    this.certification();
   },
   
 }

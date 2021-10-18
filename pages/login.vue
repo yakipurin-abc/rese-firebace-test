@@ -5,46 +5,31 @@
     <div class="ttl">
       <h2>Login</h2>
     </div>
-    <form @submit.prevent="login">
-      <ul>
-        <li>
-          <label for="email"><img src="~assets//email.png"></label>
-          <input type="email" id="email" class="email log-form" v-model="email" placeholder="Email" required />
-        </li>
-        <li>
-          <label for="password"><img src="~assets//key.png"></label>
-          <input type="password"  id="password" class="pass log-form" v-model="password" placeholder="Password" required />
-        </li>
-      </ul>
-      <button type="submit" class="btn">ログイン</button>
-    </form>
-  </div>
+      <button @click="login" type="submit" class="btn">Googleでログイン</button>
+   </div>
+  
 </div>
 </template>
 
 <script>
+import firebase from "~/plugins/firebase";
 export default {
-  data() {
-    return {
-      email: null,
-      password: null,
-    };
-  },
   methods: {
-    async login() {
-      try {
-        await this.$auth.loginWith("laravelJWT", {
-          data: {
-            email: this.email,
-            password: this.password,
-          },
-        });
-        this.$router.push("/");
-      } catch {
-        alert("メールアドレスまたはパスワードが間違っております");
-      }
+    login() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+  firebase.auth().signInWithRedirect(provider)
     },
+    certification(){
+				firebase.auth().onAuthStateChanged((user) => {
+    			if (user) {
+            this.$router.push('/')
+    			}
+  			});
+			},
   },
+  created() {
+			this.certification();
+		}
 };
 </script>
 <style scoped>
@@ -63,43 +48,40 @@ export default {
   background-color: #fff;
   border-radius: 10px;
   color: #fff;
+  width: 300px;
+  height: 300px;
 }
 .ttl{
   background-color: rgb(49, 114, 255);
   padding: 10px;
   border-radius: 10px 10px 0 0;
 }
-ul{
-  margin: 15px;
-  padding: 0;
-}
-li{
-  list-style: none;
-  margin: 15px;
-  display: flex;
-}
-li img{
-  width: 30px;
-  margin-right: 10px;
-}
-li input{
-  outline: none;
-}
-.log-form{
-  border-bottom:2px solid #000;
-  border-right:none;
-  border-left:none;
-  border-top:none;
-  border-radius:0px;
-}
+
 .btn{
-  float: right;
-  margin-right: 15px;
+ position: relative;
   background-color: rgb(49, 114, 255);
+  width: 200px;
+  display: block;
+  padding: 18;
+  text-align: center;
   color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  margin: 100px auto;
+}
+.btn::before{
+   content: "";
+  position: absolute;
+  top: 50%;
+  left: 1px;
+  background: url(~assets//google.png) no-repeat;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  transform: translate(0, -50%);
+
 }
 @media screen and (max-width: 768px) {
 
