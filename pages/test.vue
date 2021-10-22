@@ -1,38 +1,37 @@
 <template>
-  <div class="login">
-    <div>
-      <button @click="login">googleアカウントでログイン</button>
-    </div>
+<div>
+  <div v-for="item in items" :key="item.id">
+    <datepicker id="date" class="datepicker" v-model="item.date" :format="DatePickerFormat" :language="ja" @closed='pickerClosedChange' :disabled-dates="disabledDates"/>
   </div>
+</div>
 </template>
-
 <script>
-import firebase from "~/plugins/firebase";
-export default {
-  methods: {
-    login() {
-      const provider = new firebase.auth.GoogleAuthProvider()
-  firebase.auth().signInWithRedirect(provider)
-    },
-    certification(){
-				firebase.auth().onAuthStateChanged((user) => {
-    			if (user) {
-            this.$router.push('confirm')
-    			}
-  			});
-			},
-  },
-  created() {
-			this.certification();
-		}
-}
-</script>
+import {ja} from 'vuejs-datepicker/dist/locale';
+import moment from 'moment';
+import Datepicker from "vuejs-datepicker";
 
-<style scoped>
-.login {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>
+export default ({
+  components: {
+    Datepicker,
+  },
+  data(){
+    return{
+      items: [
+        {id: '1', date: '2021-10-31'}
+      ],
+      DatePickerFormat: 'yyyy/MM/dd',
+      ja:ja,
+      disabledDates: {
+        to: new Date(),
+      },
+    }
+  },
+  methods: {
+    pickerClosedChange() {
+    　if (this.date) {
+      　 this.date = moment(this.date).format('YYYY-MM-DD')
+    　}
+    },
+  }
+})
+</script>

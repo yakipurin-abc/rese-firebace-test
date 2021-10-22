@@ -5,8 +5,8 @@
       <div class="reserve-info">
         <h2>{{user}}さん</h2>
         <h3>予約状況</h3>
-        <div>
-          <div class="reserve-detail" v-for="(item, index) in contents" :key='index'>
+        <div v-for="(item, index) in contents" :key='index'>
+          <div class="reserve-detail" >
             <div class="reserve-ttl">
               <img src="~/assets/clock.png">
               <p>予約{{index + 1}}</p>
@@ -20,26 +20,38 @@
                 </tr>
                 <tr>
                   <th>Date</th>
-                  <td>{{item.date | format-date}}</td>
+                  <td><datepicker id="date" class="datepicker" :format="DatePickerFormat" :language="ja" v-model="item.date" @closed='pickerClosedChange(item.id)'
+            :disabled-dates="disabledDates"/></td>
                 </tr>
                 <tr>
                   <th>Time</th>
-                  <td>{{item.time | omittedText}}</td>
+                  <td>
+                    <select name="time" v-model="item.time" required>
+                      <option :value="item.time">{{item.time | omittedText}}</option>
+                      <option v-for="time in times" :key="time.id" :value="time.time">{{time.time}}</option>
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                   <th>Number</th>
-                  <td>{{item.number}}人</td>
+                  <td>
+                    <select name="number" id="number" v-model="item.number">
+                      <option :value="item.number">{{item.number}}人</option>
+                      <option v-for="number in numbers" :key="number.id" :value="number.number">{{number.number}}人</option>
+                    </select>
+                  </td>
                 </tr>
               </table>
-
             </div>
+          </div>
+          <div class="update-btn" @click="updateReserve(item.id, item.shop_id, item.user_id, item.date, item.time, item.number)">
+            <button>予約更新</button>
           </div>
         </div>
       </div>
       <div class="like-info">
         <div class="like-user">
           <h2>{{user}}さん</h2>
-          <p>{{user_id}}</p>
         </div>
         <div class="like-contents">
           <h3>お気に入り店舗</h3>
@@ -69,9 +81,15 @@
   </div>
 </template>
 <script>
+import {ja} from 'vuejs-datepicker/dist/locale';
+import moment from 'moment';
+import Datepicker from "vuejs-datepicker";
 import axios from "axios";
 import firebase from "~/plugins/firebase";
 export default {
+  components: {
+    Datepicker,
+  },
   data(){
     return{
       contents: [],
@@ -80,6 +98,49 @@ export default {
       user: '',
 			email: '',
       user_id: '',
+      date: '',
+      time: '',
+      number: '',
+      times:[
+        {id: '1', time: '12:00'},
+        {id: '2', time: '12:30'},
+        {id: '3', time: '13:00'},
+        {id: '4', time: '13:30'},
+        {id: '5', time: '14:00'},
+        {id: '6', time: '14:30'},
+        {id: '7', time: '15:00'},
+        {id: '8', time: '15:30'},
+        {id: '9', time: '16:00'},
+        {id: '10', time: '16:30'},
+        {id: '11', time: '17:00'},
+        {id: '12', time: '17:30'},
+        {id: '13', time: '18:00'},
+        {id: '14', time: '18:30'},
+        {id: '15', time: '19:00'},
+        {id: '16', time: '19:30'},
+        {id: '17', time: '20:00'},
+        {id: '18', time: '20:30'},
+        {id: '19', time: '21:00'},
+        {id: '20', time: '21:30'},
+        {id: '21', time: '22:00'},
+      ],
+      numbers:[
+        {id: '1', number: '1'},
+        {id: '2', number: '2'},
+        {id: '3', number: '3'},
+        {id: '4', number: '4'},
+        {id: '5', number: '5'},
+        {id: '6', number: '6'},
+        {id: '7', number: '7'},
+        {id: '8', number: '8'},
+        {id: '9', number: '9'},
+        {id: '10', number: '10'},
+      ],
+      DatePickerFormat: 'yyyy/MM/dd',
+      ja:ja,
+      disabledDates: {
+      to: new Date(),
+      },
     }
   },
   methods:{
@@ -94,6 +155,10 @@ export default {
         }
       });
 		},
+    pickerClosedChange(inputId) {
+        const item = this.items.find((v) => v.id === inputId);  // itemsの中からidが一致する要素をitemに取得する
+        item.date = moment(item.date).format("YYYY-MM-DD");
+    },
     async getContent() {
       console.log(this.user_id);
       console.log('this.user_id');
@@ -106,6 +171,23 @@ export default {
       console.log("レスデータ");
       console.log(this.contents);
       console.log('コンテンツ');
+    },
+    async updateReserve(id, shop_id, user_id, date, time, number) {
+      const sendData = {
+        shop_id: shop_id,
+        user_id: user_id,
+        date: date,
+        time: time,
+        number: number,
+      };
+      console.log(date);
+      console.log(sendData);
+      console.log('センドデータ')
+      await this.$axios.put(
+        "http://127.0.0.1:8000/api/v1/reserve/" + id,
+        sendData
+      );
+      this.getContent();
     },
     async deleteReserve(id) {
       await this.$axios.delete("http://127.0.0.1:8000/api/v1/reserve/" + id);
@@ -188,9 +270,9 @@ export default {
 .reserve-detail{
   background-color: rgb(49, 114, 255);
   padding: 30px;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   height: 300px;
-  margin-bottom: 30px;
+  
 }
 .reserve-ttl{
   display: flex;
@@ -274,6 +356,28 @@ table{
 .unlike-img{
   filter: invert(50%) sepia(85%) saturate(7000%) hue-rotate(310deg) brightness(80%) contrast(112%);
 }
+.datepicker{
+  color: black;
+}
+select{
+  color: black;
+}
+.update-btn button{
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 50px;
+  margin-left: 0;
+  margin-bottom: 10px;
+  border: none;
+  background-color: rgb(32, 73, 255);
+  color: #fff;
+  border-radius: 0 0 10px 10px;
+  cursor: pointer;
+  text-align: center;
+  outline: none;
+  display: inline-block;
+}
 @media screen and (max-width: 768px){
 
   .contents{
@@ -307,6 +411,9 @@ table{
   .card{
     width: 100%;
     margin: 0;
+  }
+  .reserve-table{
+    margin-top: 30px;
   }
 }
 </style>

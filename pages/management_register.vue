@@ -32,7 +32,7 @@ export default {
         }
         console.log(sendData);
         console.log('センドデータ')
-        await this.$axios.post("http://localhost:8000/api/auth/m_register", sendData);
+        await this.$axios.post("http://localhost:8000/api/auth/register", sendData);
         this.$router.push("/management_login");
       } catch {
         alert("その名前はすでに登録されています");

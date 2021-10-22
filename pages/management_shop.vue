@@ -1,6 +1,6 @@
 <template>
   <div class="management">
-    <Header></Header>
+    <ManagementHeader></ManagementHeader>
     <div class="management-ttl">
       <h2>店舗管理画面</h2>
     </div>
@@ -31,7 +31,7 @@
         </select>
         </div>
       </div>
-      <div class="shop-add">
+      <div class="shop-add" v-if="$auth.user.role_id !='3'">
         <div class="ttl"><p>店舗を追加</p></div>
         <div class="search">
           <label>店舗名:</label>
@@ -77,7 +77,7 @@
           <th>ジャンル</th>
           <th>詳細</th>
           <th>店舗詳細</th>
-          <th>削除</th>
+          <th v-if="$auth.user.role_id !='3'">削除</th>
         </tr>
         <tr v-for="shop in filterdShops" :key="shop.id">
           <td class="shop-name">{{shop.name}}</td>
@@ -85,7 +85,7 @@
           <td class="shop-genre">{{shop.genre.name}}</td>
           <td class="shop-detail">{{shop.detail}}</td>
           <td><NuxtLink :to="{ name: 'shop-id', params:{id: shop.id}}" class="btn" >店舗詳細へ</NuxtLink></td>
-          <td><button @click="shopDelete(shop.id)" type="submit" class="btn">削除</button></td>
+          <td v-if="$auth.user.role_id !='3'"><button @click="shopDelete(shop.id)" type="submit" class="btn" >削除</button></td>
         </tr>
       </table>
     </div>

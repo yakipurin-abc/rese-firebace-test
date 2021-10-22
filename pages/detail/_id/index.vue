@@ -87,19 +87,19 @@
         </div>
       </div>
     </div>
+    <Comments></Comments>
   </div>
 </template>
 <script>
 import Datepicker from "vuejs-datepicker";
 import {ja} from 'vuejs-datepicker/dist/locale';
 import moment from 'moment';
-
 import firebase from "~/plugins/firebase";
-
+import axios from "axios";
 export default {
-  
+
   components: {
-    Datepicker
+    Datepicker,
   },
   data(){
     return{
@@ -115,7 +115,7 @@ export default {
       ja:ja,
       disabledDates: {
       to: new Date(),
-    },
+      },
     }
   },
   methods:{
@@ -130,6 +130,7 @@ export default {
           this.email = user.email
           this.user = user.displayName
 					this.user_id = user.uid
+          this.getReserve();
         }
       });
 		},
@@ -137,7 +138,8 @@ export default {
       try{
         const sendData = {
         	shop_id: this.paramsId,
-        	user_id: this.user_id,
+        	name: this.user,
+          user_id: this.user_id,
           date: this.date,
 					time: this.time,
           number: this.number,
@@ -163,10 +165,32 @@ export default {
       console.log(this.contents);
       console.log('コンテンツ');
     },
+    async getReserve() {
+      console.log(this.user_id);
+      console.log('this.user_id');
+      const sendData = {
+        user_id: this.user_id,
+        shop_id: this.paramsId
+      }
+      console.log(sendData);
+      console.log('センドデータ');
+      const resData = await this.$axios.request({
+  				method: 'get',
+  				url: 'http://127.0.0.1:8000/api/v1/reserve/{reserve}',
+  				data: {user_id: this.user_id,  shop_id: this.paramsId},
+				});
+      this.reserves = resData.data.items;
+
+      console.log(resData);
+      console.log("レスデータ");
+      console.log(this.reserves);
+      console.log('リザーブ');
+    },
   },
   created() {
     this.getContent();
     this.certification();
+    
   },
 }
 </script>
@@ -285,7 +309,7 @@ td{
   }
   .reserve-contents{
     margin-left: 0;
-    padding: 20px 55px;
+    padding: 0 55px;
   }
   .reserve-btn button{
     margin-left: 0;

@@ -1,12 +1,12 @@
 <template>
   <div class="shop-detail">
-    <Header></Header>
+    <ManagementHeader></ManagementHeader>
     <h2 v-for="name in shopName" :key="name.id" class="shop-ttl">
       {{name.name}}
     </h2>
     <div class="reserve-list">
       <div  v-if="contents.length != 0">
-        <p>《予約一覧》</p>
+        <p class="ttl">《予約一覧》</p>
         <table>
           <tr>
             <th>ユーザー名</th>
@@ -18,7 +18,7 @@
           </tr>
           <tr v-for="reserve in contents" :key="reserve.id">
             <td>
-              <p>{{reserve.user.name}}</p>
+              <p>{{reserve.name}}</p>
             </td>
             <td>
               <input type="date" name="date" id="date" v-model="reserve.date">
@@ -68,8 +68,8 @@
         <p>現在予約はありません</p>
       </div>
     </div>
-    <div class="reserve-list">
-      <p>《店舗詳細》</p>
+    <div class="shop-update" v-if="$auth.user.role_id !='3'">
+      <p class="ttl">《店舗詳細》</p>
       <div v-for="shop in shopName" :key="shop.id">
         <table>
           <tr>
@@ -108,7 +108,7 @@
             <td class="shop-image">
               <input type="text" v-model="shop.image">
             </td>
-            <td><button @click="updateShop(shop.id, shop.name, shop.area_id, shop.genre_id, shop.detail, shop.image)">更新</button>
+            <td ><button  @click="updateShop(shop.id, shop.name, shop.area_id, shop.genre_id, shop.detail, shop.image)">更新</button>
             </td>
           </tr>
         </table>
@@ -117,12 +117,14 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return{
       paramsId: this.$route.params.id || '',
       contents: [],
       shopName: [],
+
     }
   },
   methods: {
@@ -137,14 +139,13 @@ export default {
       console.log(this.shopName);
       console.log('ショップネーム');
     },
+    
     async getContent() {
-      const resData = await this.$axios.request({
-  			method: 'get',
-  			url: 'http://127.0.0.1:8000/api/v1/reserve/' + this.paramsId,
-  			params: {id: this.paramsId},
-			});
-      this.contents = resData.data.reserves;
-      console.log(resData);
+      console.log(this.paramsId)
+      console.log('パラムス')
+      const contents = await axios.get("http://127.0.0.1:8000/api/v1/reserve/" + this.paramsId);
+      this.contents = contents.data.data;
+      console.log(contents);
       console.log("レスデータ");
       console.log(this.contents);
       console.log('コンテンツ');
@@ -226,12 +227,23 @@ th, td{
   width: 300px;
 }
 .reserve-list{
-  border-bottom: solid 1px #000;
+  
   margin: 30px 0;
   padding-bottom: 30px;
 }
 .reserve-list input, select, textarea{
   outline: none;
   resize: none;
+}
+.shop-update{
+  border-bottom: solid 1px #000;
+  border-top: solid 1px #000;
+  padding-top: 30px;
+  margin: 30px 0;
+  padding-bottom: 30px;
+}
+.ttl{
+  font-size: 20px;
+  margin-left: 10%;
 }
 </style>

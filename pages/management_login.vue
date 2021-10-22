@@ -30,13 +30,13 @@ export default {
   methods: {
     async login() {
       try {
-        await this.$auth.loginWith("local", {
+        await this.$auth.loginWith("laravelJWT", {
           data: {
             name: this.name,
             password: this.password,
           },
         });
-        this.$router.push("management_user");
+        this.$router.push("management_shop");
       } catch {
         alert("メールアドレスまたはパスワードが間違っております");
       }
