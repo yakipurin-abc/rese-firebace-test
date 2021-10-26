@@ -5,6 +5,7 @@
       <div class="shop-detail">
         <div class="contents-name">
           <NuxtLink  to="/" class="back-home" >＜</NuxtLink>
+
           <h2>{{content.name}}</h2>
         </div>
         <img :src="content.image" >
@@ -87,6 +88,7 @@
         </div>
       </div>
     </div>
+    
     <Comments></Comments>
   </div>
 </template>
@@ -130,7 +132,6 @@ export default {
           this.email = user.email
           this.user = user.displayName
 					this.user_id = user.uid
-          this.getReserve();
         }
       });
 		},
@@ -165,32 +166,10 @@ export default {
       console.log(this.contents);
       console.log('コンテンツ');
     },
-    async getReserve() {
-      console.log(this.user_id);
-      console.log('this.user_id');
-      const sendData = {
-        user_id: this.user_id,
-        shop_id: this.paramsId
-      }
-      console.log(sendData);
-      console.log('センドデータ');
-      const resData = await this.$axios.request({
-  				method: 'get',
-  				url: 'http://127.0.0.1:8000/api/v1/reserve/{reserve}',
-  				data: {user_id: this.user_id,  shop_id: this.paramsId},
-				});
-      this.reserves = resData.data.items;
-
-      console.log(resData);
-      console.log("レスデータ");
-      console.log(this.reserves);
-      console.log('リザーブ');
-    },
   },
   created() {
     this.getContent();
     this.certification();
-    
   },
 }
 </script>

@@ -68,7 +68,7 @@
                   <p>#{{content.shop.genre.name}}</p>
                 </div>
                 <div class="shop-btn">
-                  <NuxtLink :to="{ name: 'detail-id', params:{id: content.id}}" class="btn" >詳しくみる</NuxtLink>
+                  <NuxtLink :to="{ name: 'detail-id', params:{id: content.shop.id}}" class="btn" >詳しくみる</NuxtLink>
                   <img src="~/assets/heart.png" @click.prevent="unlike(content.shop.id)"  class="unlike-img">
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default {
       });
 		},
     pickerClosedChange(inputId) {
-        const item = this.items.find((v) => v.id === inputId);  // itemsの中からidが一致する要素をitemに取得する
+        const item = this.contents.find((v) => v.id === inputId);
         item.date = moment(item.date).format("YYYY-MM-DD");
     },
     async getContent() {

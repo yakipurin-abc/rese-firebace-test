@@ -1,37 +1,30 @@
 <template>
-<div>
-  <div v-for="item in items" :key="item.id">
-    <datepicker id="date" class="datepicker" v-model="item.date" :format="DatePickerFormat" :language="ja" @closed='pickerClosedChange' :disabled-dates="disabledDates"/>
-  </div>
-</div>
+　<div id="app">
+　　<ul v-for="member of limitCount" :key="member.name">
+　　　<li>{{ member.name }}：{{ member.age}}
+　　　</li>
+　　</ul>
+　</div>
 </template>
-<script>
-import {ja} from 'vuejs-datepicker/dist/locale';
-import moment from 'moment';
-import Datepicker from "vuejs-datepicker";
 
-export default ({
-  components: {
-    Datepicker,
-  },
-  data(){
-    return{
-      items: [
-        {id: '1', date: '2021-10-31'}
-      ],
-      DatePickerFormat: 'yyyy/MM/dd',
-      ja:ja,
-      disabledDates: {
-        to: new Date(),
-      },
-    }
-  },
-  methods: {
-    pickerClosedChange() {
-    　if (this.date) {
-      　 this.date = moment(this.date).format('YYYY-MM-DD')
-    　}
-    },
-  }
-})
+<script>
+　export default {
+　　data: function() {
+　　　return {
+　　　　members: [
+　　　　　{ name: '山田', age: '34歳' },
+　　　　　{ name: '田中', age: '45歳' }, 
+　　　　　{ name: '中村', age: '29歳' },
+　　　　　{ name: '村井', age: '38歳' },
+　　　　　{ name: '井上', age: '28歳' },
+　　　　　{ name: '上野', age: '33歳' }
+　　　　]
+　　　}
+　　},
+　　computed: {
+　　　limitCount() {
+　　　　return this.members.slice(0,4)
+　　　}
+　　}
+　}
 </script>
