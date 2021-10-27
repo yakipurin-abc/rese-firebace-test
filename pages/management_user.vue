@@ -71,7 +71,7 @@ export default {
     async getContent() {
       const resData = await this.$axios.request({
   			method: 'get',
-  			url: 'http://127.0.0.1:8000/api/v1/user/'
+  			url: 'https://vast-sea-00508.herokuapp.com/api/v1/user/'
 			});
       this.users = resData.data.user;
       console.log(resData);
@@ -82,7 +82,7 @@ export default {
     async userDelete(id) {
 				await this.$axios.request({
   				method: 'delete',
-  				url: 'http://127.0.0.1:8000/api/v1/user/{user}',
+  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/user/{user}',
   				data: {id: id},
 				});
       this.getContent();
@@ -95,7 +95,7 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
       await this.$axios.put(
-        "http://127.0.0.1:8000/api/v1/user/" + id,
+        "https://vast-sea-00508.herokuapp.com/api/v1/user/" + id,
         sendData
       );
       this.getContent();
@@ -109,7 +109,7 @@ export default {
         }
         console.log(sendData);
         console.log('センドデータ')
-        await this.$axios.post("http://localhost:8000/api/auth/register", sendData);
+        await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/auth/register", sendData);
         this.getContent();
       } catch {
         alert("その名前はすでに登録されています");

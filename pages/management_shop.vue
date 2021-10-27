@@ -110,7 +110,7 @@ export default {
     async getContent() {
       const resData = await this.$axios.request({
   			method: 'get',
-  			url: 'http://127.0.0.1:8000/api/v1/shop/'
+  			url: 'https://vast-sea-00508.herokuapp.com/api/v1/shop/'
 			});
       this.shops = resData.data.data;
       console.log(resData);
@@ -121,7 +121,7 @@ export default {
     async shopDelete(id) {
 				await this.$axios.request({
   				method: 'delete',
-  				url: 'http://127.0.0.1:8000/api/v1/shop/{shop}',
+  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/shop/{shop}',
   				data: {id: id},
 				});
       this.getContent();
@@ -137,7 +137,7 @@ export default {
         }
         console.log(sendShopData);
         console.log("センドデータ");
-        await this.$axios.post("http://127.0.0.1:8000/api/v1/shop", sendShopData);
+        await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/v1/shop", sendShopData);
         this.getContent();
       } catch{
         alert("正しく入力して下さい");

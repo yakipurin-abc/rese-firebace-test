@@ -131,7 +131,7 @@ export default {
     async getShopName(){
       const resShopName = await this.$axios.request({
         method: 'get',
-  			url: 'http://127.0.0.1:8000/api/v1/shop/' + this.paramsId,
+  			url: 'https://vast-sea-00508.herokuapp.com//api/v1/shop/' + this.paramsId,
   			params: {id: this.paramsId},
       })
       this.shopName = resShopName.data.data;
@@ -143,7 +143,7 @@ export default {
     async getContent() {
       console.log(this.paramsId)
       console.log('パラムス')
-      const contents = await axios.get("http://127.0.0.1:8000/api/v1/reserve/" + this.paramsId);
+      const contents = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId);
       this.contents = contents.data.data;
       console.log(contents);
       console.log("レスデータ");
@@ -151,7 +151,7 @@ export default {
       console.log('コンテンツ');
     },
     async deleteReserve(id) {
-      await this.$axios.delete("http://127.0.0.1:8000/api/v1/reserve/" + id);
+      await this.$axios.delete("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id);
       this.getContent();
     },
     async updateReserve(id, shop_id, user_id, date, time, number) {
@@ -165,7 +165,7 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
       await this.$axios.put(
-        "http://127.0.0.1:8000/api/v1/reserve/" + id,
+        "https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id,
         sendData
       );
       this.getContent();
@@ -181,7 +181,7 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
        await this.$axios.put(
-        "http://127.0.0.1:8000/api/v1/shop/" + id,
+        "https://vast-sea-00508.herokuapp.com/api/v1/shop/" + id,
         sendData
       );
       this.getContent();
