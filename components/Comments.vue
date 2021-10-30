@@ -72,7 +72,6 @@ export default {
       } else{
         alert('過去に投稿しています。')
       }
-      	
     },
     async getEvaluation(){
       console.log(this.paramsId);
@@ -103,7 +102,7 @@ export default {
         }
       });
 		},
-    //来店したかを予約で判別するためのデータをここで取得
+    //個人の予約データをここで取得
     async getReserve() {
       const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId + '/' + this.user_id);
       this.reserves = resData.data.data;
