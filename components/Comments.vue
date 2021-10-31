@@ -104,7 +104,7 @@ export default {
 		},
     //個人の予約データをここで取得
     async getReserve() {
-      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId + '/' + this.user_id);
+      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId );
       this.reserves = resData.data.data;
       this.nowdate = resData.data.date;
       this.nowtime = resData.data.time
