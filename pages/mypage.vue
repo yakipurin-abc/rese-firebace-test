@@ -163,7 +163,7 @@ export default {
       console.log(this.user_id);
       console.log('this.user_id');
       const resData = await axios.get(
-        `https://creepy-witch-87015.herokuapp.com/api/v1/reserve?user_id=${this.user_id}`
+        `https://vast-sea-00508.herokuapp.com/api/v1/reserve?user_id=${this.user_id}`
         );
       this.contents = resData.data.items;
 
@@ -184,13 +184,13 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
       await this.$axios.put(
-        "https://creepy-witch-87015.herokuapp.com/api/v1/reserve/" + id,
+        "https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id,
         sendData
       );
       this.getContent();
     },
     async deleteReserve(id) {
-      await this.$axios.delete("https://creepy-witch-87015.herokuapp.com/api/v1/reserve/" + id);
+      await this.$axios.delete("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id);
       this.getContent();
       this.$router.push('/mypage');
     },
@@ -198,7 +198,7 @@ export default {
       console.log(this.user_id);
       console.log('ユーザーID');
       const resLikeInfo = await axios.get(
-        `https://creepy-witch-87015.herokuapp.com/api/v1/like?user_id=${this.user_id}`
+        `https://vast-sea-00508.herokuapp.com/api/v1/like?user_id=${this.user_id}`
         );
 			console.log(resLikeInfo);
 			console.log('ライクインフォ');
@@ -211,7 +211,7 @@ export default {
     async unlike(id) {
 				await this.$axios.request({
   				method: 'delete',
-  				url: 'https://creepy-witch-87015.herokuapp.com/api/v1/like/{like}',
+  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/like/{like}',
   				data: {user_id: this.user_id,  shop_id: id},
 				});
 				this.like_check();

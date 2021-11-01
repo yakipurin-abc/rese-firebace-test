@@ -137,7 +137,7 @@ export default {
         }
         console.log(sendShopData);
         console.log("センドデータ");
-        await this.$axios.post("http://creepy-witch-87015/api/v1/shop", sendShopData);
+        await this.$axios.post("http://vast-sea-00508.herokuapp.com/api/v1/shop", sendShopData);
         this.getContent();
       } catch{
         alert("正しく入力して下さい");
