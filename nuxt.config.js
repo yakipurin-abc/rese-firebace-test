@@ -58,13 +58,8 @@ export default {
   
   //CORS対策
   proxy: {
-  '/api1/': 'http://example.com',
-  '/api2/': {
-    target: 'http://example.com',
-    pathRewrite: {'^/api/': ''}
-  },
-   '/api3/': {
-    target: 'http://example.com',
+   '/api/': {
+    target: 'https://vast-sea-00508.herokuapp.com/api/v1',
     pathRewrite: {'^/api/': '/'}
   },
 },
