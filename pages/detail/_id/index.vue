@@ -98,7 +98,6 @@ import moment from 'moment';
 import firebase from "~/plugins/firebase";
 import axios from "axios";
 export default {
-
   components: {
     Datepicker,
   },
@@ -177,7 +176,6 @@ export default {
   color: black;
   outline: none;
   margin-bottom: 10px;
-
 }
 .reserve-date input{
   width: 100%;
@@ -293,5 +291,4 @@ td{
     margin-left: 0;
   }
 }
-
 </style>

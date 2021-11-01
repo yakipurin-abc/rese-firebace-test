@@ -92,6 +92,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -108,7 +109,7 @@ export default {
   },
   methods: {
     async getContent() {
-      const resData = await this.$axios.request({
+      const resData = await axios.request({
   			method: 'get',
   			url: '/api/shop/'
 			});
@@ -121,7 +122,7 @@ export default {
     async shopDelete(id) {
 				await this.$axios.request({
   				method: 'delete',
-  				url: '/api/shop/{shop}',
+  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/shop/{shop}',
   				data: {id: id},
 				});
       this.getContent();
@@ -137,7 +138,7 @@ export default {
         }
         console.log(sendShopData);
         console.log("センドデータ");
-        await this.$axios.post("/api/shop", sendShopData);
+        await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/v1/shop", sendShopData);
         this.getContent();
       } catch{
         alert("正しく入力して下さい");

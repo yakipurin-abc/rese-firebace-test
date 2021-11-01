@@ -129,9 +129,9 @@ export default {
   },
   methods: {
     async getShopName(){
-      const resShopName = await this.$axios.request({
+      const resShopName = await axios.request({
         method: 'get',
-  			url: 'https://vast-sea-00508.herokuapp.com//api/v1/shop/' + this.paramsId,
+  			url: 'https://vast-sea-00508.herokuapp.com/api/v1/shop/' + this.paramsId,
   			params: {id: this.paramsId},
       })
       this.shopName = resShopName.data.data;
@@ -151,7 +151,7 @@ export default {
       console.log('コンテンツ');
     },
     async deleteReserve(id) {
-      await this.$axios.delete("/api/reserve/" + id);
+      await this.$axios.delete("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id);
       this.getContent();
     },
     async updateReserve(id, shop_id, user_id, date, time, number) {

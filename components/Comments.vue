@@ -128,7 +128,6 @@ export default {
       this.getEvaluation();
       this.certification()
       this.getReserve();
-
   },
   filters: {
       moment: function (date) {
@@ -163,7 +162,6 @@ export default {
 .evaluation{
   margin: 0 auto;
   margin-top: 30px;
-
   width: 80%;
 }
 .post-eva{
