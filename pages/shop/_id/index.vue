@@ -143,7 +143,7 @@ export default {
     async getContent() {
       console.log(this.paramsId)
       console.log('パラムス')
-      const contents = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId);
+      const contents = await axios.get("/api/reserve/" + this.paramsId);
       this.contents = contents.data.data;
       console.log(contents);
       console.log("レスデータ");
@@ -151,7 +151,7 @@ export default {
       console.log('コンテンツ');
     },
     async deleteReserve(id) {
-      await this.$axios.delete("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id);
+      await this.$axios.delete("/api/reserve/" + id);
       this.getContent();
     },
     async updateReserve(id, shop_id, user_id, date, time, number) {
@@ -165,7 +165,7 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
       await this.$axios.put(
-        "https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + id,
+        "/api/reserve/" + id,
         sendData
       );
       this.getContent();
@@ -181,7 +181,7 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
        await this.$axios.put(
-        "https://vast-sea-00508.herokuapp.com/api/v1/shop/" + id,
+        "/api/shop/" + id,
         sendData
       );
       this.getContent();

@@ -100,7 +100,7 @@ export default {
     async like_check(){
       console.log(this.user_id);
       const resLikeInfo = await axios.get(
-        `https://vast-sea-00508.herokuapp.com/api/v1/like?user_id=${this.user_id}`
+        `/api/like?user_id=${this.user_id}`
         );
 			console.log(resLikeInfo);
 			console.log('ライクインフォ');
@@ -116,13 +116,13 @@ export default {
         user_id: this.user_id,
 				shop_id: id,
       };
-      await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/v1/like", addLike);
+      await this.$axios.post("/api/like", addLike);
 			this.like_check();
     },
     async unlike(id) {
 				await this.$axios.request({
   				method: 'delete',
-  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/like/{like}',
+  				url: '/api/like/{like}',
   				data: {user_id: this.user_id,  shop_id: id},
 				});
 				this.like_check();
