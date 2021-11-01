@@ -63,7 +63,7 @@ export default {
       if(this.checks.length == 0){
         try{
           console.log(this.user)
-        await axios.post("https://vast-sea-00508.herokuapp.com/api/v1/evaluation/", sendData);
+        await axios.post("https://creepy-witch-87015.herokuapp.com/api/v1/evaluation/", sendData);
         this.getEvaluation();
         this.$router.push('/')
         } catch{
@@ -80,7 +80,7 @@ export default {
         shop_id: this.paramsId,
         user_id: this.user_id
       }
-      const evaluation = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/evaluation/" + this.paramsId)
+      const evaluation = await axios.get("https://creepy-witch-87015.herokuapp.com/api/v1/evaluation/" + this.paramsId)
       this.items = evaluation.data.data;
       console.log(evaluation);
       console.log('evaluation')
@@ -88,7 +88,7 @@ export default {
       console.log('items')
     },
     async deleteComment(id) {
-      await this.$axios.delete("https://vast-sea-00508.herokuapp.com/api/v1/evaluation/" + id);
+      await this.$axios.delete("https://creepy-witch-87015.herokuapp.com/api/v1/evaluation/" + id);
       this.getEvaluation();
     },
     certification(){
@@ -104,7 +104,7 @@ export default {
 		},
     //個人の予約データをここで取得
     async getReserve() {
-      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId + '/' + this.user_id );
+      const resData = await axios.get("https://creepy-witch-87015.herokuapp.com/api/v1/reserve/" + this.paramsId + '/' + this.user_id );
       this.reserves = resData.data.data;
       this.nowdate = resData.data.date;
       this.nowtime = resData.data.time
@@ -115,7 +115,7 @@ export default {
     },
     //過去にコメントしたことがあるかを取得する
     async checkComment() {
-      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/evaluation/" + this.paramsId + '/' + this.user_id);
+      const resData = await axios.get("https://creepy-witch-87015.herokuapp.com/api/v1/evaluation/" + this.paramsId + '/' + this.user_id);
       this.checks = resData.data.data
       console.log(resData);
       console.log("レスデータ");

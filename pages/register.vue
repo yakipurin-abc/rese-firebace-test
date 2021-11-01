@@ -38,7 +38,7 @@ export default {
   methods: {
     async register() {
       try {
-        await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/auth/register", {
+        await this.$axios.post("https://creepy-witch-87015.com/api/auth/register", {
           name: this.name,
           email: this.email,
           password: this.password,

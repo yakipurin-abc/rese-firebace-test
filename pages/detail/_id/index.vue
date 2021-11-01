@@ -147,7 +147,7 @@ export default {
       	};
         console.log(sendData)
         console.log('センドデータ')
-      	await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/v1/reserve", sendData)
+      	await this.$axios.post("https://creepy-witch-87015.herokuapp.com/api/v1/reserve", sendData)
         this.$router.push('/done')
       } catch(error) {
         console.log(error);
@@ -157,7 +157,7 @@ export default {
     async getContent() {
       const resData = await this.$axios.request({
   			method: 'get',
-  			url: 'https://vast-sea-00508.herokuapp.com/api/v1/shop/' + this.paramsId,
+  			url: 'https://creepy-witch-87015.herokuapp.com/api/v1/shop/' + this.paramsId,
   			params: {id: this.paramsId},
 			});
       this.contents = resData.data.data;

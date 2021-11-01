@@ -32,7 +32,7 @@ export default {
         }
         console.log(sendData);
         console.log('センドデータ')
-        await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/auth/register", sendData);
+        await this.$axios.post("http://creepy-witch-87015/api/auth/register", sendData);
         this.$router.push("/management_login");
       } catch {
         alert("その名前はすでに登録されています");
