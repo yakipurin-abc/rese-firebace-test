@@ -5,7 +5,6 @@
       <div class="shop-detail">
         <div class="contents-name">
           <NuxtLink  to="/" class="back-home" >＜</NuxtLink>
-
           <h2>{{content.name}}</h2>
         </div>
         <img :src="content.image" >

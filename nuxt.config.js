@@ -54,7 +54,20 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {proxy: true,},
+  axios: { proxy: true, },
+  
+  //CORS対策
+  proxy: {
+  '/api1/': 'http://example.com',
+  '/api2/': {
+    target: 'http://example.com',
+    pathRewrite: {'^/api/': ''}
+  },
+   '/api3/': {
+    target: 'http://example.com',
+    pathRewrite: {'^/api/': '/'}
+  },
+},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
