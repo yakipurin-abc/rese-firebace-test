@@ -71,8 +71,8 @@ export default {
     strategies: {
       'laravelJWT': {
         provider: 'laravel/jwt',
-        //http://localhost:8000
-        url: 'https://vast-sea-00508.herokuapp.com',
+        //https://vast-sea-00508.herokuapp.com
+        url: 'http://localhost:8000',
         token: {
           maxAge: 60 * 60
         },
