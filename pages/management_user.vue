@@ -6,7 +6,7 @@
     </div>
     <div v-if="$auth.loggedIn">
       <div class="user-add" >
-        <form >
+        <form @submit.prevent="register">
           <label for="">追加</label>
           <input type="text" v-model="name" placeholder="name" required />
           <select name="role_id" id="role_id" v-model="newRoleId">
