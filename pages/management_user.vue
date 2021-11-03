@@ -102,17 +102,14 @@ export default {
     },
     async register() {
       try {
-        const sendData ={
+        await this.$axios.post("https://vast-sea-00508.com/api/auth/register", {
           name: this.name,
-          role_id: this.newRoleId,
+          email: this.email,
           password: this.password,
-        }
-        console.log(sendData);
-        console.log('センドデータ')
-        await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/auth/register", sendData);
-        this.getContent();
+        });
+        this.$router.push("/thanks");
       } catch {
-        alert("その名前はすでに登録されています");
+        alert("ユーザー名またはメールアドレスがすでに登録されています");
       }
     },
   },
