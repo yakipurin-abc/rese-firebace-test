@@ -75,10 +75,7 @@ export default {
       }
     },
     async getContent() {
-      const resData = await this.$axios.request({
-  			method: 'get',
-  			url: '/api/user/'
-			});
+      const resData = await this.$axios.get("https://vast-sea-00508.herokuapp.com/api/v1/user")
       this.users = resData.data.user;
       console.log(resData);
       console.log("レスデータ");
