@@ -98,7 +98,7 @@ export default {
       console.log(sendData);
       console.log('センドデータ')
       await this.$axios.put(
-        "/api/user/" + id,
+        "https://vast-sea-00508.herokuapp.com/api/v1/user/" + id,
         sendData
       );
       this.getContent();
