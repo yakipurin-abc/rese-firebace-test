@@ -113,7 +113,7 @@ export default {
       this.shops = resData.data.data;
       console.log(resData);
       console.log("レスデータ");
-      console.log(this.contents);
+      console.log(this.shops);
       console.log('コンテンツ');
     },
     async shopDelete(id) {
