@@ -111,7 +111,7 @@ export default {
     async getContent() {
       const resData = await axios.request({
   			method: 'get',
-  			url: '/api/shop/'
+  			url: 'https://vast-sea-00508.herokuapp.com/shop/'
 			});
       this.shops = resData.data.data;
       console.log(resData);
