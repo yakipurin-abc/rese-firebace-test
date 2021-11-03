@@ -126,11 +126,19 @@ export default {
   				data: {user_id: this.user_id,  shop_id: id},
 				});
 				this.like_check();
-    	},
+    },
+    async getContent() {
+      const resData = await axios.get("/api/shop")
+      this.shops = resData.data.data;
+      console.log(resData);
+      console.log("aaa");
+      console.log(this.contents);
+      console.log('aaaaa');
+    },
   },
   created() {
     this.certification();
-
+    this.getContent();
   },
   computed: {
     filterdShops: function(){

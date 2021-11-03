@@ -141,17 +141,6 @@ export default {
         alert("正しく入力して下さい");
       }
     },
-    async Content() {
-      const resData = await this.$axios.request({
-  			method: 'get',
-  			url: '/api/shop/'
-			});
-      this.contents = resData.data.data;
-      console.log(resData);
-      console.log("aaa");
-      console.log(this.contents);
-      console.log('aaaa');
-    },
   },
   created(){
     this.getContent();
