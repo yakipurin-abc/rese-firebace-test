@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     async getContent() {
-      const resData = await axios.get("/api/shop")
+      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/shop")
       this.shops = resData.data.data;
       console.log(resData);
       console.log("レスデータ");

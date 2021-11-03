@@ -127,18 +127,9 @@ export default {
 				});
 				this.like_check();
     },
-    async getContent() {
-      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/shop")
-      this.shops = resData.data.data;
-      console.log(resData);
-      console.log("aaa");
-      console.log(this.shops);
-      console.log('aaaaa');
-    },
   },
   created() {
     this.certification();
-    this.getContent();
   },
   computed: {
     filterdShops: function(){
