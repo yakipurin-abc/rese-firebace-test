@@ -109,10 +109,7 @@ export default {
   },
   methods: {
     async getContent() {
-      const resData = await axios.request({
-  			method: 'get',
-  			url: '/api/shop'
-			});
+      const resData = await axios.get("/api/shop")
       this.shops = resData.data.data;
       console.log(resData);
       console.log("レスデータ");
