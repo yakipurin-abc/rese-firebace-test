@@ -85,7 +85,7 @@ export default {
     async userDelete(id) {
 				await this.$axios.request({
   				method: 'delete',
-  				url: '/api/user/{user}',
+  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/user/{user}',
   				data: {id: id},
 				});
       this.getContent();
