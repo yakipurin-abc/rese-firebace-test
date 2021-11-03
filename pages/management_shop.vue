@@ -144,7 +144,6 @@ export default {
   },
   created(){
     this.getContent();
-    this.Content();
   },
   computed: {
     filterdShops: function(){
