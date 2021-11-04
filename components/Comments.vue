@@ -3,7 +3,9 @@
   <div v-for="item in items" :key="item.id" class="user-eva">
     <div class="eva-name">
       <h2>{{item.name}}</h2>
-      <img src="~/assets/ゴミ箱のアイコン.png" @click="deleteComment(item.id)">
+      <div v-if="item.user_id == user_id">
+        <img src="~/assets/ゴミ箱のアイコン.png" @click="deleteComment(item.id)" >
+      </div>
     </div>
     <p>評価：{{item.rate}}</p>
     <p>コメント：{{item.comment}}</p>

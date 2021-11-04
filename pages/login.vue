@@ -6,6 +6,7 @@
       <h2>Login</h2>
     </div>
       <button @click="login" type="submit" class="btn">Googleでログイン</button>
+      <p>※Googleでのログイン後、ホーム画面に映るまで時間がかかることがあります。</p>
    </div>
   
 </div>
@@ -69,7 +70,8 @@ export default {
   font-weight: bold;
   text-decoration: none;
   border-radius: 10px;
-  margin: 100px auto;
+  margin: 0 auto;
+  margin-top: 100px;
 }
 .btn::before{
    content: "";
@@ -81,7 +83,12 @@ export default {
   width: 30px;
   height: 30px;
   transform: translate(0, -50%);
-
+}
+p{
+  color: #000;
+  width: 90%;
+  text-align: center;
+  margin: 10px auto;
 }
 @media screen and (max-width: 768px) {
 
