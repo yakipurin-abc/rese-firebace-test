@@ -13,7 +13,7 @@
         <div class="search-area search">
           <label>エリア名:</label>
           <select name="area" id="area" v-model="searchArea" >
-          <option value="">All area</option>
+          <option value="">全エリア</option>
           <option value="東京都">東京都</option>
           <option value="大阪府">大阪府</option>
           <option value="福岡県">福岡県</option>
@@ -22,7 +22,7 @@
         <div class="search-genre search">
           <label>ジャンル名:</label>
           <select name="genre" id="genre" v-model="searchGenre">
-          <option value="">All genre</option>
+          <option value="">全ジャンル</option>
           <option value="寿司">寿司</option>
           <option value="焼肉">焼肉</option>
           <option value="居酒屋">居酒屋</option>
