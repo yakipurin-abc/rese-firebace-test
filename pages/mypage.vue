@@ -15,16 +15,16 @@
             <div class="reserve-table">
               <table>
                 <tr>
-                  <th>Shop</th>
+                  <th>ショップ</th>
                   <td>{{item.shop.name}}</td>
                 </tr>
                 <tr>
-                  <th>Date</th>
+                  <th>日付</th>
                   <td><datepicker id="date" class="datepicker" :format="DatePickerFormat" :language="ja" v-model="item.date" @closed='pickerClosedChange(item.id)'
             :disabled-dates="disabledDates"/></td>
                 </tr>
                 <tr>
-                  <th>Time</th>
+                  <th>時間</th>
                   <td>
                     <select name="time" v-model="item.time" required>
                       <option :value="item.time">{{item.time | omittedText}}</option>
@@ -33,7 +33,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <th>Number</th>
+                  <th>人数</th>
                   <td>
                     <select name="number" id="number" v-model="item.number">
                       <option :value="item.number">{{item.number}}人</option>

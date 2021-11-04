@@ -10,16 +10,16 @@
         <div class="drawer-menu">
           <ul>
             <li>
-              <NuxtLink  to="/" class="btn menu-list"  >Home</NuxtLink>
+              <NuxtLink  to="/" class="btn menu-list"  >ホーム</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/login" class="btn menu-list">Login</NuxtLink>
+              <NuxtLink to="/login" class="btn menu-list">ログイン</NuxtLink>
             </li>
             <li >
-              <p @click="logout" class="menu-list">Logout</p>
+              <p @click="logout" class="menu-list">ログアウト</p>
             </li>
             <li>
-              <NuxtLink to="/mypage" class="btn menu-list">Mypage</NuxtLink>
+              <NuxtLink to="/mypage" class="btn menu-list">マイページ</NuxtLink>
             </li>
             <li ></li>
           </ul>
