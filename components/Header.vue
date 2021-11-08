@@ -120,5 +120,11 @@ li{
     margin-left: 10px;
     padding-top: 30px;
   }
+  .drawer-menu{
+    width: 80%;
+  }
+  ul{
+    text-align: center;
+  }
 }
 </style>

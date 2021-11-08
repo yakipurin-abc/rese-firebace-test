@@ -10,7 +10,8 @@
             <div class="reserve-ttl">
               <img src="~/assets/clock.png">
               <p>予約{{index + 1}}</p>
-              <img src="~/assets/cross_white.png" class="test"  @click="deleteReserve(item.id)">
+              <img src="~/assets/cross_white.png" class="test"  @click="openModal(item)">
+              <modalReserve :val="postItem" v-if="showModal" @close="closeModal"></modalReserve>
             </div>
             <div class="reserve-table">
               <table>
@@ -81,6 +82,7 @@
   </div>
 </template>
 <script>
+import modalReserve from '~/components/modal_reserve.vue'
 import {ja} from 'vuejs-datepicker/dist/locale';
 import moment from 'moment';
 import Datepicker from "vuejs-datepicker";
@@ -89,9 +91,12 @@ import firebase from "~/plugins/firebase";
 export default {
   components: {
     Datepicker,
+    modalReserve,
   },
   data(){
     return{
+      showModal: false,
+      postItem: '',
       contents: [],
       status: false,
       likeStatus: [],
@@ -144,6 +149,13 @@ export default {
     }
   },
   methods:{
+    openModal(item) {
+      this.postItem = item;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
     certification(){
 			firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -152,6 +164,8 @@ export default {
 					this.user_id = user.uid
           this.like_check();
           this.getContent();
+        } else {
+          this.$router.push("/login");
         }
       });
 		},

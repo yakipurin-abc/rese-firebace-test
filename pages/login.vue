@@ -71,7 +71,7 @@ export default {
   text-decoration: none;
   border-radius: 10px;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 60px;
 }
 .btn::before{
    content: "";

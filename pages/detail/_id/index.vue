@@ -17,48 +17,59 @@
       <div>
       </div>
       <div class="reserve">
+        <validation-observer ref="obs" v-slot="ObserverProps">
         <div class="reserve-contents">
           <ul>
           <li class="reserve-ttl">
             <h2>予約</h2>
           </li>
           <li class="reserve-date">
-            <label for="date">Date</label>
-            <datepicker id="date" class="datepicker" :format="DatePickerFormat" :language="ja" v-model="date" @closed='pickerClosedChange'
-            :disabled-dates="disabledDates"/>
+            <validation-provider v-slot="ProviderProps" >
+              <label for="date">Date</label>
+              <datepicker id="date" class="datepicker" :format="DatePickerFormat" :language="ja" v-model="date" @closed='pickerClosedChange'
+              :disabled-dates="disabledDates"/>
+              <div class="error">{{ ProviderProps.errors[0] }}</div>
+            </validation-provider>
           </li>
           <li class="reserve-time select">
-            <label for="">Time</label>
-            <select name="time" v-model="time" required>
-              <option disabled selected >時間を選んでください</option>
-              <option value="12:00">12:00</option>
-              <option value="12:30">12:30</option>
-              <option value="13:00">13:00</option>
-              <option value="13:30">13:30</option>
-              <option value="14:00">14:00</option>
-              <option value="14:30">14:30</option>
-              <option value="15:00">15:00</option>
-              <option value="15:30">15:30</option>
-              <option value="16:00">16:00</option>
-              <option value="16:30">16:30</option>
-              <option value="17:00">17:00</option>
-              <option value="17:30">17:30</option>
-              <option value="18:00">18:00</option>
-              <option value="18:30">18:30</option>
-              <option value="19:00">19:00</option>
-              <option value="19:30">19:30</option>
-              <option value="20:00">20:00</option>
-              <option value="20:30">20:30</option>
-              <option value="21:00">21:00</option>
-              <option value="21:30">21:30</option>
-              <option value="22:00">22:00</option>
-            </select>
+            <validation-provider v-slot="ProviderProps" rules="oneOf:12:00,12:30,13:00,13:30,14:00,14:30,15:00,15:30,16:00,16:30,17:00,17:30,18:00,18:30,19:00,19:30,20:00,20:30,21:00,21:30,22:00">
+              <label for="">Time</label>
+              <select name="time" v-model="time" >
+                <option disabled selected >時間を選んでください</option>
+                <option value="12:00">12:00</option>
+                <option value="12:30">12:30</option>
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+                <option value="16:00">16:00</option>
+                <option value="16:30">16:30</option>
+                <option value="17:00">17:00</option>
+                <option value="17:30">17:30</option>
+                <option value="18:00">18:00</option>
+                <option value="18:30">18:30</option>
+                <option value="19:00">19:00</option>
+                <option value="19:30">19:30</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+                <option value="21:30">21:30</option>
+                <option value="22:00">22:00</option>
+                <option value="22:30">22:30</option>
+              </select>
+              <div class="error">{{ ProviderProps.errors[0] }}</div>
+            </validation-provider>
           </li>
           <li class="reserve-number select">
-            <label for="">Number</label>
-            <select name="number" v-model="number">
-              <option v-for="(n, nIndex) in 10" v-bind:key="nIndex" v-bind:value="n">{{ n }}人</option>
-            </select>
+            <validation-provider v-slot="ProviderProps" rules="oneOf:1,2,3,4,5,6,7,8,9,10">
+              <label for="">Number</label>
+              <select name="number" v-model="number">
+                <option v-for="(n, nIndex) in 10" v-bind:key="nIndex" v-bind:value="n">{{ n }}人</option>
+              </select>
+              <div class="error">{{ ProviderProps.errors[0] }}</div>
+            </validation-provider>
           </li>
         </ul>
         <div class="reserve-data">
@@ -83,8 +94,9 @@
         </div>
         </div>
         <div class="reserve-btn">
-          <button @click="reserve">予約する</button>
+          <button @click="reserve" :disabled="ObserverProps.invalid || !ObserverProps.validated">予約する</button>
         </div>
+        </validation-observer>
       </div>
     </div>
     
@@ -130,6 +142,8 @@ export default {
           this.email = user.email
           this.user = user.displayName
 					this.user_id = user.uid
+        } else {
+          this.$router.push("/login");
         }
       });
 		},

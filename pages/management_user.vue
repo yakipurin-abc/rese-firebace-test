@@ -1,32 +1,55 @@
 <template>
   <div class="management">
-    <ManagementHeader></ManagementHeader>
+    <div class="header">
+      <ManagementHeader></ManagementHeader>
+      <p>ログイン中のユーザー：{{$auth.user.name}}</p>
+      <p v-if="$auth.user.role_id==1">管理者</p>
+      <p v-else-if="$auth.user.role_id==2">店長</p>
+      <p v-else>従業員</p>
+    </div>
     <div class="management-ttl">
       <h2>ユーザー管理画面</h2>
     </div>
     <div v-if="$auth.loggedIn">
       <div class="user-add" >
-        <form @submit.prevent="register">
-          <label for="">追加</label>
-          <input type="text" v-model="name" placeholder="name" required />
-          <select name="role_id" id="role_id" v-model="newRoleId">
-            <option value="" >ロールを選んでください</option>
-            <option value="1" >管理者</option>
-            <option value="2">店長</option>
-            <option value="3">従業員</option>
-          </select>
-
-          <input type="password" v-model="password" placeholder="password" required />
-          <button type="submit">追加</button>
-        </form>
+        <validation-observer ref="obs" v-slot="ObserverProps">
+    <form @submit.prevent="register">
+      <ul>
+        <li>
+          <validation-provider v-slot="ProviderProps" rules="required">
+            <input type="text" v-model="name" class="regi-form" placeholder="名前"  />
+            <div class="error">{{ ProviderProps.errors[0] }}</div>
+          </validation-provider>
+        </li>
+        <li>
+          <validation-provider v-slot="ProviderProps" rules="oneOf:1,2,3">
+            <select name="role_id" id="role_id" v-model="newRoleId">
+              <option value="" selected="selected">ロールを選んでください</option>
+              <option value="1" >管理者</option>
+              <option value="2">店長</option>
+              <option value="3">従業員</option>
+            </select>
+            <div class="error">{{ ProviderProps.errors[0] }}</div>
+          </validation-provider>
+        </li>
+        <li>
+          <validation-provider v-slot="ProviderProps" rules="required">
+          <input type="password" v-model="password" placeholder="パスワード"  class="regi-form"/>
+          <div class="error">{{ ProviderProps.errors[0] }}</div>
+          </validation-provider>
+        </li>
+      </ul>
+      <button type="submit" class="btn" :disabled="ObserverProps.invalid || !ObserverProps.validated">登録</button>
+    </form>
+    </validation-observer>
       </div>
       <div class="user-info" >
         <table>
           <tr>
             <th>名前</th>
             <th>ロール</th>
-            <th>更新</th>
-            <th>削除</th>
+            <th v-if="$auth.user.role_id !='3'">更新</th>
+            <th v-if=" $auth.user.role_id !='3'">削除</th>
           </tr>
           <tr v-for="user in users" :key="user.id">
             <td class="user-name">
@@ -40,9 +63,10 @@
                 <option value="3">従業員</option>
                 </select>
               </td>
-              <td><button v-if="user.id != 1" @click="updateUser(user.id, user.name, user.role_id)">更新</button>
+              <td><button v-if="user.id!=5 && $auth.user.role_id != 3" @click="updateUser(user.id, user.name, user.role_id)">更新</button>
               </td>
-            <td><button v-if="user.id != 1" @click="userDelete(user.id)">削除</button></td>
+            <td><button v-if="user.id!=5 && $auth.user.role_id != 3" @click="openModal(user)">削除</button>
+            <modalUser :val="postItem" v-if="showModal" @close="closeModal"></modalUser></td>
           </tr>
         </table>
       </div>
@@ -54,9 +78,16 @@
   </div>
 </template>
 <script>
+import modalUser from '~/components/modal_user.vue'
 export default {
+  middleware: 'authenticator',
+  components: {
+    modalUser,
+  },
   data() {
     return {
+      showModal: false,
+      postItem: '',
       users: [],
       searchName: '',
       searchRole: '',
@@ -66,6 +97,13 @@ export default {
     };
   },
   methods: {
+    openModal(user) {
+      this.postItem = user;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
     async logout() {
       try {
         await this.$auth.logout();
@@ -80,16 +118,8 @@ export default {
       console.log(resData);
       console.log("レスデータ");
       console.log(this.users);
-      console.log('コンテンツ');
+      console.log('ユーザーズ');
     },
-    async userDelete(id) {
-				await this.$axios.request({
-  				method: 'delete',
-  				url: 'https://vast-sea-00508.herokuapp.com/api/v1/user/{user}',
-  				data: {id: id},
-				});
-      this.getContent();
-    	},
       async updateUser(id, name, role_id) {
       const sendData = {
         name: name,
@@ -113,9 +143,9 @@ export default {
         console.log(sendData);
         console.log('センドデータ')
         await this.$axios.post("https://vast-sea-00508.herokuapp.com/api/auth/register", sendData);
-        this.$router.push("/management_login");
+        location.reload()
       } catch {
-        alert("その名前はすでに登録されています");
+        alert("その名前はすでに登録されている、または入力事項が条件に合っていません。");
       }
     },
   },
@@ -126,6 +156,10 @@ export default {
 };
 </script>
 <style scoped>
+.header p{
+  margin-left: 30px;
+  margin-top: 10px;
+}
 .login-comment{
   text-align: center;
   margin-top:100px;

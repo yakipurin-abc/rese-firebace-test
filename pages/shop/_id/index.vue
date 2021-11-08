@@ -59,7 +59,8 @@
               <button @click="updateReserve(reserve.id, reserve.shop_id, reserve.user_id, reserve.date, reserve.time, reserve.number)">更新</button>
             </td>
             <td>
-              <button @click="deleteReserve(reserve.id)">削除</button>
+              <button @click="openModal(reserve)">削除</button>
+              <modalReserve :val="postItem" v-if="showModal" @close="closeModal"></modalReserve>
             </td>
           </tr>
         </table>
@@ -68,66 +69,96 @@
         <p>現在予約はありません</p>
       </div>
     </div>
-    <div class="shop-update" v-if="$auth.user.role_id !='3'">
-      <p class="ttl">《店舗詳細》</p>
-      <div v-for="shop in shopName" :key="shop.id">
-        <table>
-          <tr>
-            <th>店舗名</th>
-            <th>地域</th>
-            <th>ジャンル</th>
-            <th>詳細</th>
-            <th>イメージ画像URL</th>
-            <th>更新</th>
-          </tr>
-          <tr>
-            <td class="shop-name">
-              <input type="text" v-model="shop.name" >
-            </td>
-            <td>
-              <select name="area" id="area" v-model="shop.area_id" >
-                <option :value="shop.area_id">{{shop.area.name}}</option>
-                <option value="13">東京都</option>
-                <option value="27">大阪府</option>
-                <option value="40">福岡県</option>
-              </select>
-            </td>
-            <td>
-              <select name="genre_id" id="genre_id" v-model="shop.genre_id">
-                <option :value="shop.genre_id">{{shop.genre.name}}</option>
-                <option value="1">寿司</option>
-                <option value="2">焼肉</option>
-                <option value="3">居酒屋</option>
-                <option value="4">イタリアン</option>
-                <option value="5">ラーメン</option>
-              </select>
-            </td>
-            <td>
-              <textarea name="" id="" cols="30" rows="10" v-model="shop.detail"></textarea>
-            </td>
-            <td class="shop-image">
-              <input type="text" v-model="shop.image">
-            </td>
-            <td ><button  @click="updateShop(shop.id, shop.name, shop.area_id, shop.genre_id, shop.detail, shop.image)">更新</button>
-            </td>
-          </tr>
-        </table>
+    <validation-observer ref="obs" v-slot="ObserverProps">
+      <div class="shop-update" v-if="$auth.user.role_id !='3'">
+        <p class="ttl">《店舗詳細》</p>
+        <div v-for="shop in shopName" :key="shop.id">
+          <table>
+            <tr>
+              <th>店舗名</th>
+              <th>地域</th>
+              <th>ジャンル</th>
+              <th>詳細</th>
+              <th>イメージ画像URL</th>
+              <th>更新</th>
+            </tr>
+            <tr>
+              <td class="shop-name">
+                <validation-provider v-slot="ProviderProps" rules="required|max:10">
+                  <input type="text" v-model="shop.name" >
+                  <div class="error">{{ ProviderProps.errors[0] }}</div>
+                </validation-provider>
+              </td>
+              <td>
+                <validation-provider v-slot="ProviderProps" rules="oneOf:13,27,40">
+                  <select name="area" id="area" v-model="shop.area_id" >
+                    <option :value="shop.area_id">{{shop.area.name}}</option>
+                    <option value="13">東京都</option>
+                    <option value="27">大阪府</option>
+                    <option value="40">福岡県</option>
+                  </select>
+                  <div class="error">{{ ProviderProps.errors[0] }}</div>
+                </validation-provider>
+              </td>
+              <td>
+                <validation-provider v-slot="ProviderProps" rules="oneOf:1,2,3,4,5">
+                  <select name="genre_id" id="genre_id" v-model="shop.genre_id">
+                    <option :value="shop.genre_id">{{shop.genre.name}}</option>
+                    <option value="1">寿司</option>
+                    <option value="2">焼肉</option>
+                    <option value="3">居酒屋</option>
+                    <option value="4">イタリアン</option>
+                    <option value="5">ラーメン</option>
+                  </select>
+                  <div class="error">{{ ProviderProps.errors[0] }}</div>
+                </validation-provider>
+              </td>
+              <td>
+                <validation-provider v-slot="ProviderProps" rules="required|max:100">
+                  <textarea name="" id="" cols="30" rows="10" v-model="shop.detail"></textarea>
+                  <div class="error">{{ ProviderProps.errors[0] }}</div>
+                </validation-provider>
+              </td>
+              <td class="shop-image">
+                <validation-provider v-slot="ProviderProps" rules="required">
+                  <input type="text" v-model="shop.image">
+                  <div class="error">{{ ProviderProps.errors[0] }}</div>
+                </validation-provider>
+              </td>
+              <td ><button v-if="$auth.user.role_id !='3'" :disabled="ObserverProps.invalid || !ObserverProps.validated"  @click="updateShop(shop.id, shop.name, shop.area_id, shop.genre_id, shop.detail, shop.image)">更新</button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>
+    </validation-observer>
   </div>
 </template>
 <script>
+import modalReserve from '~/components/modal_reserve.vue'
 import axios from "axios";
 export default {
+  middleware: 'authenticator',
+  components: {
+    modalReserve,
+  },
   data() {
     return{
       paramsId: this.$route.params.id || '',
       contents: [],
       shopName: [],
-
+      showModal: false,
+      postItem: '',
     }
   },
   methods: {
+    openModal(reserve) {
+      this.postItem = reserve;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
     async getShopName(){
       const resShopName = await axios.request({
         method: 'get',
@@ -164,10 +195,15 @@ export default {
       };
       console.log(sendData);
       console.log('センドデータ')
-      await this.$axios.put(
+      try{
+        await this.$axios.put(
         "/api/reserve/" + id,
         sendData
       );
+      } catch{
+        alert("店舗名は10文字、詳細は50文字以内で入力し、入力必須です。");
+      }
+      
       this.getContent();
     },
     async updateShop(id, name, area_id, genre_id, detail, image) {

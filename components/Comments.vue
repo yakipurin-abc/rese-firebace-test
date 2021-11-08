@@ -4,31 +4,42 @@
     <div class="eva-name">
       <h2>{{item.name}}</h2>
       <div v-if="item.user_id == user_id">
-        <img src="~/assets/ゴミ箱のアイコン.png" @click="deleteComment(item.id)" >
+        <img src="~/assets/ゴミ箱のアイコン.png" @click="openModal(item)" >
+        <modalEvaluation :val="postItem" v-if="showModal" @close="closeModal"></modalEvaluation>
       </div>
     </div>
     <p>評価：{{item.rate}}</p>
     <p>コメント：{{item.comment}}</p>
   </div>
-  <div >
-    <div class="post-eva" v-for="(comItem,index) in limitCount" :key="index">
-      <div v-if="(nowdate+nowtime)>(comItem.date+comItem.time)">
-        <div class="rating">
-          <h3>[評価]</h3>
-          <star-rating v-model="rate" v-bind:increment="0.5" class="ster"></star-rating>
+  <div>
+    <validation-observer ref="obs" v-slot="ObserverProps">
+      <div class="post-eva" v-for="(comItem,index) in limitCount" :key="index">
+        <div v-if="(nowdate+nowtime)>(comItem.date+comItem.time)">
+          <validation-provider v-slot="ProviderProps" rules="oneOf:0.5,1,1.5,2,2.5,3,3.5,4,4.5,5">
+            <div class="rating">
+              <h3>[評価]</h3>
+              <star-rating v-model="rate" v-bind:increment="0.5" class="ster"></star-rating>
+            </div>
+            <div class="error">{{ ProviderProps.errors[0] }}</div>
+          </validation-provider>
+          <div class="comment">
+            <h3>[コメント]</h3>
+            <validation-provider v-slot="ProviderProps" rules="required|max:150">
+            <textarea name="comment" id="" cols="60" rows="8" v-model="comment"></textarea>
+            <div class="error">{{ ProviderProps.errors[0] }}</div>
+          </validation-provider>
+          </div>
+          
+          <button @click="send" :disabled="ObserverProps.invalid || !ObserverProps.validated">投稿</button>
         </div>
-      <div class="comment">
-        <h3>[コメント]</h3>
-        <textarea name="comment" id="" cols="60" rows="8" v-model="comment"></textarea>
       </div>
-        <button @click="send">投稿</button>
-      </div>
-    </div>
+    </validation-observer>
   </div>
 </div>
 
 </template>
 <script>
+import modalEvaluation from '~/components/modal_evaluation.vue'
 import firebase from "~/plugins/firebase";
 import axios from "axios";
 import StarRating from 'vue-star-rating'
@@ -47,10 +58,21 @@ export default {
       nowdate: '',
       nowtime: '',
       checks: [],
+      showModal: false,
+      postItem: '',
     }
   },
-  
+  components: {
+    modalEvaluation,
+  },
   methods:{
+    openModal(item) {
+      this.postItem = item;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
     date(){
       console.log(moment(new Date()))
     },
@@ -66,7 +88,7 @@ export default {
         try{
           console.log(this.user)
         await axios.post("https://vast-sea-00508.herokuapp.com/api/v1/evaluation", sendData);
-        this.getEvaluation();
+        location.reload()
         
         } catch{
           alert('正しく入力してください')
@@ -89,10 +111,7 @@ export default {
       console.log(this.items);
       console.log('items')
     },
-    async deleteComment(id) {
-      await this.$axios.delete("https://vast-sea-00508.herokuapp.com/api/v1/evaluation/" + id);
-      this.getEvaluation();
-    },
+    
     certification(){
 			firebase.auth().onAuthStateChanged((user) => {
         if (user) {
@@ -106,7 +125,7 @@ export default {
 		},
     //個人の予約データをここで取得
     async getReserve() {
-      const resData = await axios.get("https://vast-sea-00508.herokuapp.com/api/v1/reserve/" + this.paramsId + '/' + this.user_id );
+      const resData = await axios.get("/api/reserve/" + this.paramsId + '/' + this.user_id );
       this.reserves = resData.data.data;
       this.nowdate = resData.data.date;
       this.nowtime = resData.data.time

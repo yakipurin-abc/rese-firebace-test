@@ -1,30 +1,20 @@
 <template>
-　<div id="app">
-　　<ul v-for="member of limitCount" :key="member.name">
-　　　<li>{{ member.name }}：{{ member.age}}
-　　　</li>
-　　</ul>
-　</div>
+  <validation-observer ref="obs" v-slot="ObserverProps">
+    <validation-provider v-slot="ProviderProps" rules="oneOf:1,2,3">
+      <select name="role_id" id="role_id" v-model="newRoleId">
+          <option value="" selected="selected">ロールを選んでください</option>
+          <option value="1" >管理者</option>
+          <option value="2">店長</option>
+          <option value="3">従業員</option>
+          <option value="4">従</option>
+      </select>
+      <div class="error">{{ ProviderProps.errors[0] }}</div>
+    </validation-provider>
+    <button
+      type="button"
+      :disabled="ObserverProps.invalid || !ObserverProps.validated"
+    >
+      送信
+    </button>
+  </validation-observer>
 </template>
-
-<script>
-　export default {
-　　data: function() {
-　　　return {
-　　　　members: [
-　　　　　{ name: '山田', age: '34歳' },
-　　　　　{ name: '田中', age: '45歳' }, 
-　　　　　{ name: '中村', age: '29歳' },
-　　　　　{ name: '村井', age: '38歳' },
-　　　　　{ name: '井上', age: '28歳' },
-　　　　　{ name: '上野', age: '33歳' }
-　　　　]
-　　　}
-　　},
-　　computed: {
-　　　limitCount() {
-　　　　return this.members.slice(0,4)
-　　　}
-　　}
-　}
-</script>

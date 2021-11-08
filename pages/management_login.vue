@@ -2,15 +2,15 @@
   <div class="login">
   <div class="card">
     <div class="ttl">
-      <h2>Admin-Login</h2>
+      <h2>管理者ログイン</h2>
     </div>
     <form @submit.prevent="login">
       <ul>
         <li>
-          <input type="text" id="name" class="email log-form" v-model="name" placeholder="name" required />
+          <input type="text" id="name" class="email log-form" v-model="name" placeholder="名前" required />
         </li>
         <li>
-          <input type="password"  id="password" class="pass log-form" v-model="password" placeholder="Password" required />
+          <input type="password"  id="password" class="pass log-form" v-model="password" placeholder="パスワード" required />
         </li>
       </ul>
       <button type="submit" class="btn">ログイン</button>
@@ -20,7 +20,9 @@
 </template>
 
 <script>
+
 export default {
+
   data() {
     return {
       name: null,

@@ -10,7 +10,7 @@
         <div class="drawer-menu">
           <ul>
             <li>
-              <NuxtLink  to="management_user" class="btn menu-list"  >従業員管理画面</NuxtLink>
+              <NuxtLink  to="/management_user" class="btn menu-list"  >従業員管理画面</NuxtLink>
             </li>
             <li>
               <NuxtLink to="/management_shop" class="btn menu-list">店舗管理画面</NuxtLink>

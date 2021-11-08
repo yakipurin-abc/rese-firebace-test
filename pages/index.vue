@@ -2,7 +2,6 @@
   <div class="home">
     <div class="header">
       <Header></Header>
-
       <div class="search">
         <select name="area" id="area" v-model="searchArea" >
           <option value="">全地域</option>
@@ -91,6 +90,8 @@ export default {
           this.user = user.displayName
 					this.user_id = user.uid
           this.like_check();
+        } else {
+          this.$router.push("/login");
         }
       });
 		},

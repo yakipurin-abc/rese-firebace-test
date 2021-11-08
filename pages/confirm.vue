@@ -27,7 +27,10 @@ export default {
           this.user = user.displayName
 					this.user_id = user.uid
           
+        } else {
+          this.$router.push("/login");
         }
+        
       });
 		},
     logout() {
