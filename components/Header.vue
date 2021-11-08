@@ -21,9 +21,7 @@
             <li>
               <NuxtLink to="/mypage" class="btn menu-list">マイページ</NuxtLink>
             </li>
-            <li >
-              <NuxtLink to="/test" class="btn menu-list">彩香へ</NuxtLink>
-              </li>
+
           </ul>
         </div>
       </div>
