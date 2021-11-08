@@ -3,7 +3,7 @@
     <Header></Header>
   <div class="card">
     <div class="ttl">
-      <h2>Login</h2>
+      <h2>ログイン</h2>
     </div>
       <button @click="login" type="submit" class="btn">Googleでログイン</button>
       <p>※Googleでのログイン後、ホーム画面に映るまで時間がかかることがあります。</p>
