@@ -57,7 +57,6 @@
                 <option value="21:00">21:00</option>
                 <option value="21:30">21:30</option>
                 <option value="22:00">22:00</option>
-                <option value="22:30">22:30</option>
               </select>
               <div class="error">{{ ProviderProps.errors[0] }}</div>
             </validation-provider>
